@@ -24,7 +24,7 @@ class AdsMediaReporting: TabContentScript {
     }
     
     func userContentController(_ userContentController: WKUserContentController, didReceiveScriptMessage message: WKScriptMessage) {
-        if let isPlaying = message.body as? Bool, rewards.ledger.isEnabled && rewards.isAdsEnabled {
+        if let isPlaying = message.body as? Bool, rewards.isAdsEnabled {
             guard let tab = tab else { return }
             if isPlaying {
                 rewards.reportMediaStarted(tabId: tab.rewardsId)

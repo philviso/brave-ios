@@ -183,7 +183,6 @@ class BrowserViewController: UIViewController {
         legacyWallet = Self.legacyWallet(for: configuration)
         if let wallet = legacyWallet {
             // Legacy ledger is disabled by default
-            wallet.isEnabled = false
             wallet.isAutoContributeEnabled = false
             // Ensure we remove any pending contributions or recurring tips from the legacy wallet
             wallet.removeAllPendingContributions { _ in }
@@ -197,7 +196,6 @@ class BrowserViewController: UIViewController {
         if !BraveRewards.isAvailable {
             // Disable rewards services in case previous user already enabled
             // rewards in previous build
-            rewards.ledger.isEnabled = false
             rewards.isAdsEnabled = false
         } else {
             if rewards.isEnabled && !Preferences.Rewards.rewardsToggledOnce.value {
@@ -218,10 +216,7 @@ class BrowserViewController: UIViewController {
         didInit()
         
         rewards.delegate = self
-        
-        if rewards.ledger.isEnabled && !rewards.ledger.isWalletCreated {
-            rewards.createWalletIfNeeded()
-        }
+        rewards.createWalletIfNeeded()
     }
     
     static func legacyWallet(for config: BraveRewardsConfiguration) -> BraveLedger? {
@@ -928,7 +923,7 @@ class BrowserViewController: UIViewController {
         }
         
         // The user either skipped or didn't complete onboarding.
-        let isRewardsEnabled = rewards.ledger.isEnabled
+        let isRewardsEnabled = rewards.isEnabled
         let currentProgress = OnboardingProgress(rawValue: Preferences.General.basicOnboardingProgress.value) ?? .none
         
         // 1. Existing user.
